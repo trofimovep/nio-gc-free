@@ -37,15 +37,33 @@ public class AllocationTest {
 
 
     @Test
+    public void byteUtilAllocationTest() {
+        // given
+        ByteUtil byteUtil = new ByteUtil(20);
+        String example = "example";
+        AllocationTracker.clear();
+        AllocationTracker.turnOn();
+
+        // when
+        byteUtil.bytesFromString(example);
+        AllocationTracker.turnOff();
+
+        // then
+        AllocationTracker.clear();
+        assertEquals(0, AllocationTracker.getNumOfRecordedAllocations());
+    }
+
+
+    @Test
     public void test() throws InterruptedException {
         // given
-        int messagesAmount = 1_000;
-        StandardNioServer server = new StandardNioServer(messagesAmount, PONG);
+        int messagesAmount = 1;
+        StandardNioServer server = new StandardNioServer(messagesAmount + 1, PONG);
         StandardNioClient client = new StandardNioClient(messagesAmount, PING);
 
         //when
         server.start();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         long start = System.nanoTime();
         client.start();

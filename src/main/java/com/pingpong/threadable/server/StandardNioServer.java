@@ -15,8 +15,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
-import static com.pingpong.ConnectionInfo.HOST;
-import static com.pingpong.ConnectionInfo.PORT;
+import static com.pingpong.ConnectionInfo.*;
 
 public class StandardNioServer extends Thread {
 
@@ -26,11 +25,11 @@ public class StandardNioServer extends Thread {
     private String outputMessage;
     private int sent = 0;
     private int got = 0;
-    private ByteBuffer inputBuffer = ByteBuffer.allocate(1024);
-    private ByteBuffer outputBuffer = ByteBuffer.allocate(1024);
+    private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+    private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-    private ByteUtil byteUtil = new ByteUtil(1024);
-    private CustomSetUtil customSetUtil;
+    private ByteUtil byteUtil = new ByteUtil(BUFFER_SIZE);
+    private CustomSetUtil customSetUtil = new CustomSetUtil();
 
     private static Selector selector;
     private ServerSocketChannel socketChannel;
@@ -51,7 +50,6 @@ public class StandardNioServer extends Thread {
     public StandardNioServer(int limitMessages, String outputMessage) {
         this.outputMessage = outputMessage;
         this.limitMessages = limitMessages;
-        customSetUtil = new CustomSetUtil();
     }
 
 
@@ -85,6 +83,7 @@ public class StandardNioServer extends Thread {
                 }
             }
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,9 +106,8 @@ public class StandardNioServer extends Thread {
             anotherClient.read(inputBuffer); got++;
             outputBuffer.put(byteUtil.bytesFromString(outputMessage)).flip();
             anotherClient.write(outputBuffer); sent++;
-            if (limitMessages == sent) {
-                if (AllocationTracker.IS_ACTIVE)
-                    AllocationTracker.turnOff();
+            if (limitMessages == sent + 1) {
+                if (AllocationTracker.IS_ACTIVE) AllocationTracker.turnOff();
                 isConnect = false;
             }
         } catch (IOException e) {
