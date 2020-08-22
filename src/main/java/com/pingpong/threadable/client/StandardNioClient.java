@@ -41,8 +41,10 @@ public class StandardNioClient extends Thread {
     private void startMessageExcange(int size, String message) throws IOException {
         try {
             client = SocketChannel.open(new InetSocketAddress(HOST, PORT));
-            client.write(new ByteBuffer[BUFFER_SIZE]);
-
+            // sent first for creating a buffer cache
+            client.write(ByteBuffer.allocate(BUFFER_SIZE));
+            client.read(inputBuffer);
+            clearBuffers();
             if (AllocationTracker.IS_ACTIVE) {
                 AllocationTracker.clear();
                 AllocationTracker.turnOn();
@@ -51,16 +53,16 @@ public class StandardNioClient extends Thread {
             for (int i = 0; i < size; i++) {
                 outputBuffer.put(byteUtil.bytesFromString(message));
                 outputBuffer.flip();
-                client.write(outputBuffer); sent++;
-                client.read(inputBuffer); got++;
+                client.write(outputBuffer);
+                sent++;
+                client.read(inputBuffer);
+                got++;
                 clearBuffers();
 
                 if (AllocationTracker.IS_ACTIVE) {
                     AllocationTracker.turnOff();
                 }
             }
-
-            client.write(new ByteBuffer[BUFFER_SIZE]);
 
         } catch (IOException e) {
             e.printStackTrace();

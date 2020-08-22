@@ -21,7 +21,7 @@ public class WorkingTest {
 
         //when
         server.start();
-        Thread.sleep(2000);
+        Thread.sleep(1_000);
         client.start();
 
         client.join();
@@ -31,8 +31,8 @@ public class WorkingTest {
         Assertions.assertAll(
                 () -> assertEquals(messagesAmount, client.getSent()),
                 () -> assertEquals(messagesAmount, client.getGot()),
-                () -> assertEquals(messagesAmount, server.getSent()),
-                () -> assertEquals(messagesAmount, server.getGot())
+                () -> assertEquals(messagesAmount + 1, server.getSent()),
+                () -> assertEquals(messagesAmount + 1, server.getGot())
         );
     }
 

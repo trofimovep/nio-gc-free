@@ -38,7 +38,6 @@ public class StandardNioServer extends Thread {
     private int ops;
     private THashSet<SelectionKey> selectedKeys;
     private SocketChannel client;
-    private SocketChannel anotherClient;
 
 
     TObjectProcedure<SelectionKey> procedure = key -> {
@@ -102,11 +101,12 @@ public class StandardNioServer extends Thread {
 
     private void handleRead(SelectionKey key) {
         try {
-            anotherClient = (SocketChannel) key.channel();
-            anotherClient.read(inputBuffer); got++;
+            client = (SocketChannel) key.channel();
+            client.read(inputBuffer); got++;
             outputBuffer.put(byteUtil.bytesFromString(outputMessage)).flip();
-            anotherClient.write(outputBuffer); sent++;
-            if (limitMessages == sent + 1) {
+            client.write(outputBuffer); sent++;
+            clearBuffers();
+            if (sent == limitMessages + 1) {
                 if (AllocationTracker.IS_ACTIVE) AllocationTracker.turnOff();
                 isConnect = false;
             }

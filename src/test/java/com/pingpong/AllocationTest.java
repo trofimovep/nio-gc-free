@@ -57,8 +57,8 @@ public class AllocationTest {
     @Test
     public void test() throws InterruptedException {
         // given
-        int messagesAmount = 1;
-        StandardNioServer server = new StandardNioServer(messagesAmount + 1, PONG);
+        int messagesAmount = 10_000;
+        StandardNioServer server = new StandardNioServer(messagesAmount, PONG);
         StandardNioClient client = new StandardNioClient(messagesAmount, PING);
 
         //when
