@@ -53,15 +53,13 @@ public class StandardNioClient extends Thread {
             for (int i = 0; i < size; i++) {
                 outputBuffer.put(byteUtil.bytesFromString(message));
                 outputBuffer.flip();
-                client.write(outputBuffer);
-                sent++;
-                client.read(inputBuffer);
-                got++;
+                client.write(outputBuffer); sent++;
+                client.read(inputBuffer); got++;
                 clearBuffers();
+            }
 
-                if (AllocationTracker.IS_ACTIVE) {
-                    AllocationTracker.turnOff();
-                }
+            if (AllocationTracker.IS_ACTIVE) {
+                AllocationTracker.turnOff();
             }
 
         } catch (IOException e) {
