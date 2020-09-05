@@ -16,16 +16,16 @@ public class GetStatisticGCFreeNioTest {
     @Test
     public void test() throws InterruptedException {
         System.out.println("Starting getting statistic for gc free nio...");
-
         long[] stats = new long[MESSAGES_AMOUNT.size()];
 
         for (Integer messageAmount : MESSAGES_AMOUNT) {
             long currentStat = 0;
-            for (int j = 0; j < EXPERIMENTS_AMOUNT; j++) {
+            for (int j = 0; j < TestParameters.EXPERIMENTS_AMOUNT; j++) {
                 GCFreeNioServer server = new GCFreeNioServer(messageAmount, PONG);
                 GCFreeNioClient client = new GCFreeNioClient(messageAmount, PING);
 
                 server.start();
+                System.gc();
                 Thread.sleep(300);
 
                 long start = System.nanoTime();
@@ -33,11 +33,11 @@ public class GetStatisticGCFreeNioTest {
                 client.join();
                 server.join();
                 long end = System.nanoTime();
-                currentStat += end - start;
+                currentStat = end - start;
             }
-            currentStat = currentStat / EXPERIMENTS_AMOUNT;
+            currentStat = currentStat / TestParameters.EXPERIMENTS_AMOUNT;
             stats[MESSAGES_AMOUNT.indexOf(messageAmount)] = currentStat;
-            System.out.println("Got stat for " + messageAmount + " message amount (" + EXPERIMENTS_AMOUNT + " experiments): " + currentStat);
+            System.out.println("Got stat for " + messageAmount + " message amount (" + TestParameters.EXPERIMENTS_AMOUNT + " experiments): " + currentStat);
         }
         TestParameters.writeStat("GCFreeNioStat.txt", stats);
     }
