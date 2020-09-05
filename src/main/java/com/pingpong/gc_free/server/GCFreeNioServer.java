@@ -1,8 +1,8 @@
 package com.pingpong.gc_free.server;
 
-import com.pingpong.gc_free.AllocationTracker;
-import com.pingpong.gc_free.ByteUtil;
-import com.pingpong.gc_free.CustomSetUtil;
+import com.pingpong.AllocationTracker;
+import com.pingpong.gc_free.custom.ByteUtil;
+import com.pingpong.gc_free.custom.CustomSetUtil;
 import gnu.trove.procedure.TObjectProcedure;
 import gnu.trove.set.hash.THashSet;
 
@@ -22,26 +22,25 @@ public class  GCFreeNioServer extends Thread {
     private int limitMessages;
     private boolean isConnect = true;
 
-    private String outputMessage;
     private int sent = 0;
     private int got = 0;
+    private String outputMessage;
     private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
 
     private ByteUtil byteUtil = new ByteUtil(BUFFER_SIZE);
     private CustomSetUtil customSetUtil = new CustomSetUtil();
 
-    private static Selector selector;
-    private ServerSocketChannel socketChannel;
-    private ServerSocket serverSocket;
-    private InetSocketAddress inetSocketAddress = new InetSocketAddress(HOST, PORT);
-    private int ops;
-    private THashSet<SelectionKey> selectedKeys;
     private SocketChannel client;
+    private static Selector selector;
+    private ServerSocket serverSocket;
     private SocketChannel anotheClient;
+    private ServerSocketChannel socketChannel;
+    private THashSet<SelectionKey> selectedKeys;
+    private InetSocketAddress inetSocketAddress = new InetSocketAddress(HOST, PORT);
 
 
-    TObjectProcedure<SelectionKey> procedure = key -> {
+    private TObjectProcedure<SelectionKey> procedure = key -> {
         if (key.isAcceptable()) handleAccept(socketChannel);
         else if (key.isReadable()) handleRead(key);
         return true;
@@ -69,8 +68,7 @@ public class  GCFreeNioServer extends Thread {
             serverSocket.bind(inetSocketAddress);
 
             socketChannel.configureBlocking(false);
-            ops = socketChannel.validOps();
-            socketChannel.register(selector, ops, null);
+            socketChannel.register(selector, socketChannel.validOps(), null);
 
             while (isConnect) {
                 try {
@@ -113,7 +111,8 @@ public class  GCFreeNioServer extends Thread {
             anotheClient.write(outputBuffer); sent++;
             clearBuffers();
             if (sent == limitMessages + 1) {
-                if (AllocationTracker.IS_ACTIVE) AllocationTracker.turnOff();
+                if (AllocationTracker.IS_ACTIVE)
+                    AllocationTracker.turnOff();
                 isConnect = false;
             }
         } catch (IOException e) {

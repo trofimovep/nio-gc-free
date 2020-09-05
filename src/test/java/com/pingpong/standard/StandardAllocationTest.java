@@ -1,9 +1,7 @@
 package com.pingpong.standard;
 
-import com.pingpong.gc_free.AllocationTracker;
-import com.pingpong.gc_free.ByteUtil;
-import com.pingpong.gc_free.client.GCFreeNioClient;
-import com.pingpong.gc_free.server.GCFreeNioServer;
+import com.pingpong.AllocationTracker;
+import com.pingpong.gc_free.custom.ByteUtil;
 import com.pingpong.standard.client.StandardNioClient;
 import com.pingpong.standard.server.StandardNioServer;
 import org.junit.jupiter.api.Test;
@@ -11,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static com.pingpong.ConnectionInfo.PING;
 import static com.pingpong.ConnectionInfo.PONG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class StandardAllocationTest {
 
@@ -82,6 +81,6 @@ public class StandardAllocationTest {
 
         System.out.println(AllocationTracker.getAllocationsInfo());
         System.out.println("=============================================");
-        assertEquals(0, AllocationTracker.getNumOfRecordedAllocations());
+        assertNotEquals(0, AllocationTracker.getNumOfRecordedAllocations());
     }
 }

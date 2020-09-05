@@ -1,7 +1,8 @@
 package com.pingpong;
 
-import com.pingpong.threadable.client.StandardNioClient;
-import com.pingpong.threadable.server.StandardNioServer;
+
+import com.pingpong.standard.client.StandardNioClient;
+import com.pingpong.standard.server.StandardNioServer;
 import org.junit.jupiter.api.Test;
 
 import static com.pingpong.ConnectionInfo.PING;

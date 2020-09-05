@@ -1,7 +1,7 @@
 package com.pingpong;
 
-import com.pingpong.threadable.client.StandardNioClient;
-import com.pingpong.threadable.server.StandardNioServer;
+import com.pingpong.standard.client.StandardNioClient;
+import com.pingpong.standard.server.StandardNioServer;
 import org.junit.jupiter.api.Test;
 
 import static com.pingpong.ConnectionInfo.PING;
@@ -35,23 +35,6 @@ public class AllocationTest {
         assertEquals(0, AllocationTracker.getNumOfRecordedAllocations());
     }
 
-
-    @Test
-    public void byteUtilAllocationTest() {
-        // given
-        ByteUtil byteUtil = new ByteUtil(20);
-        String example = "example";
-        AllocationTracker.clear();
-        AllocationTracker.turnOn();
-
-        // when
-        byteUtil.bytesFromString(example);
-        AllocationTracker.turnOff();
-
-        // then
-        AllocationTracker.clear();
-        assertEquals(0, AllocationTracker.getNumOfRecordedAllocations());
-    }
 
 
     @Test

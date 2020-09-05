@@ -1,9 +1,8 @@
 package com.pingpong.standard.server;
 
-import com.pingpong.gc_free.AllocationTracker;
-import com.pingpong.gc_free.ByteUtil;
-import com.pingpong.gc_free.CustomSetUtil;
-import gnu.trove.procedure.TObjectProcedure;
+import com.pingpong.AllocationTracker;
+import com.pingpong.gc_free.custom.ByteUtil;
+import com.pingpong.gc_free.custom.CustomSetUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -38,7 +37,6 @@ public class StandardNioServer extends Thread {
     private int ops;
     private Set<SelectionKey> selectedKeys;
     private SocketChannel client;
-    private SocketChannel anotheClient;
 
 
     public StandardNioServer(int limitMessages, String outputMessage) {
@@ -82,9 +80,6 @@ public class StandardNioServer extends Thread {
             e.printStackTrace();
         } finally {
             try {
-//                if (AllocationTracker.IS_ACTIVE) {
-//                    AllocationTracker.turnOff();
-//                }
                 serverSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();

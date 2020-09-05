@@ -1,7 +1,7 @@
 package com.pingpong.gc_free.client;
 
-import com.pingpong.gc_free.AllocationTracker;
-import com.pingpong.gc_free.ByteUtil;
+import com.pingpong.AllocationTracker;
+import com.pingpong.gc_free.custom.ByteUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,12 +15,11 @@ public class GCFreeNioClient extends Thread {
     private int messagetAmount;
     private String message;
 
-//    private SocketChannel client;
     private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteUtil byteUtil = new ByteUtil(BUFFER_SIZE);
 
-    SocketChannel client;
+    private SocketChannel client;
     private int sent = 0;
     private int got = 0;
 
@@ -43,6 +42,10 @@ public class GCFreeNioClient extends Thread {
                 client.write(ByteBuffer.allocate(BUFFER_SIZE));
                 client.read(inputBuffer);
                 clearBuffers();
+
+                if (AllocationTracker.IS_ACTIVE) {
+                    AllocationTracker.clearAndTurnOn();
+                }
 
                 for (int i = 0; i < size; i++) {
                     outputBuffer.put(byteUtil.bytesFromString(message));

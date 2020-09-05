@@ -1,4 +1,4 @@
-package com.pingpong.gc_free;
+package com.pingpong.gc_free.custom;
 
 
 import gnu.trove.set.hash.THashSet;

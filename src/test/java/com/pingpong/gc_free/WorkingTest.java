@@ -5,10 +5,8 @@ import com.pingpong.gc_free.server.GCFreeNioServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 import static com.pingpong.ConnectionInfo.PING;
 import static com.pingpong.ConnectionInfo.PONG;
-import static com.pingpong.TestParameters.CLIENTS_AMOUNT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WorkingTest {

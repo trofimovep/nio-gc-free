@@ -1,7 +1,5 @@
 package com.pingpong.standard;
 
-import com.pingpong.gc_free.client.GCFreeNioClient;
-import com.pingpong.gc_free.server.GCFreeNioServer;
 import com.pingpong.standard.client.StandardNioClient;
 import com.pingpong.standard.server.StandardNioServer;
 import org.junit.jupiter.api.Assertions;

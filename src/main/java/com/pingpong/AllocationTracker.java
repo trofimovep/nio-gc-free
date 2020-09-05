@@ -77,6 +77,11 @@ public class AllocationTracker {
         otherAmount = 0;
     }
 
+    public static void clearAndTurnOn() {
+        clear();
+        turnOn();
+    }
+
     public static int getNumOfRecordedAllocations() {
         return numOfRecordedAllocations;
     }

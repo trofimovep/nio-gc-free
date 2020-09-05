@@ -1,7 +1,7 @@
 package com.pingpong.standard.client;
 
-import com.pingpong.gc_free.AllocationTracker;
-import com.pingpong.gc_free.ByteUtil;
+import com.pingpong.AllocationTracker;
+import com.pingpong.gc_free.custom.ByteUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,7 +18,6 @@ public class StandardNioClient extends Thread {
     private SocketChannel client;
     private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
-    private ByteUtil byteUtil = new ByteUtil(BUFFER_SIZE);
 
     private int sent = 0;
     private int got = 0;
