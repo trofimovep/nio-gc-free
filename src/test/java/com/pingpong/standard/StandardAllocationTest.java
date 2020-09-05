@@ -82,5 +82,6 @@ public class StandardAllocationTest {
         System.out.println(AllocationTracker.getAllocationsInfo());
         System.out.println("=============================================");
         assertNotEquals(0, AllocationTracker.getNumOfRecordedAllocations());
+        assertEquals(0, AllocationTracker.getNumOfRecordedAllocations());
     }
 }

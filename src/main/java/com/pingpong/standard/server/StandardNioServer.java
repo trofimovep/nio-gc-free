@@ -102,7 +102,7 @@ public class StandardNioServer extends Thread {
         try {
             client = (SocketChannel) key.channel();
             client.read(inputBuffer); got++;
-            outputBuffer.put(byteUtil.bytesFromString(outputMessage)).flip();
+            outputBuffer.put(outputMessage.getBytes()).flip();
             client.write(outputBuffer); sent++;
             clearBuffers();
             if (sent == limitMessages + 1) {

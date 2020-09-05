@@ -17,15 +17,13 @@ public class GetStatisticGCFreeNioTest {
     public void test() throws InterruptedException {
         System.out.println("Starting getting statistic for gc free nio...");
 
-        GCFreeNioServer server;
-        GCFreeNioClient client;
         long[] stats = new long[MESSAGES_AMOUNT.size()];
 
         for (Integer messageAmount : MESSAGES_AMOUNT) {
             long currentStat = 0;
             for (int j = 0; j < EXPERIMENTS_AMOUNT; j++) {
-                server = new GCFreeNioServer(messageAmount, PONG);
-                client = new GCFreeNioClient(messageAmount, PING);
+                GCFreeNioServer server = new GCFreeNioServer(messageAmount, PONG);
+                GCFreeNioClient client = new GCFreeNioClient(messageAmount, PING);
 
                 server.start();
                 Thread.sleep(300);
