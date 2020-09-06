@@ -6,6 +6,10 @@ import com.pingpong.gc_free.custom.ByteUtil;
 import com.pingpong.gc_free.custom.CustomSetUtil;
 import gnu.trove.procedure.TObjectProcedure;
 import gnu.trove.set.hash.THashSet;
+import net.openhft.affinity.AffinityLock;
+import net.openhft.affinity.impl.LinuxJNAAffinity;
+
+//import openhft.affinity.impl.LinuxJNAAffinity;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,6 +19,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.BitSet;
 import java.util.List;
 
 import static com.pingpong.ConnectionInfo.*;
@@ -62,37 +67,52 @@ public class  GCFreeNioServer extends Thread {
 
     private void startServer() {
         try {
-            selector = Selector.open();
-            customSetUtil.substitudeSelectedKeysSet(selector);
+//            try (AffinityLock al = AffinityLock.acquireCore()) {
+            BitSet aff = new BitSet();
+                aff.set(3, true);
+                LinuxJNAAffinity.INSTANCE.setAffinity(aff);
+                selector = Selector.open();
+                customSetUtil.substitudeSelectedKeysSet(selector);
 
-            socketChannel = ServerSocketChannel.open();
-            serverSocket = socketChannel.socket();
-            serverSocket.bind(inetSocketAddress);
+                socketChannel = ServerSocketChannel.open();
+                serverSocket = socketChannel.socket();
+                serverSocket.bind(inetSocketAddress);
 
-            socketChannel.configureBlocking(false);
-            socketChannel.register(selector, socketChannel.validOps(), null);
+                socketChannel.configureBlocking(false);
+                socketChannel.register(selector, socketChannel.validOps(), null);
 
-            while (isConnect) {
-                try {
-                    selector.select();
-                    selectedKeys = (THashSet<SelectionKey>) selector.selectedKeys();
-                    selectedKeys.forEach(procedure);
-                    selectedKeys.clear();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+
+                // do some work while locked to a CPU.
+                while (isConnect) {
+//                BitSet aff = new BitSet();
+//                aff.set(3, true);
+//                LinuxJNAAffinity.INSTANCE.setAffinity(aff);
+//                AffinityLock
+
+//                    AffinityLock affinityLock
+
+                    try {
+                        selector.select();
+                        selectedKeys = (THashSet<SelectionKey>) selector.selectedKeys();
+                        selectedKeys.forEach(procedure);
+                        selectedKeys.clear();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                serverSocket.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-    }
+//    }
 
 
     private void handleAccept(ServerSocketChannel mySocket) {
