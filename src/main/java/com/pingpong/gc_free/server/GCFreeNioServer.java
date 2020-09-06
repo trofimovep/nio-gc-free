@@ -1,6 +1,7 @@
 package com.pingpong.gc_free.server;
 
 import com.pingpong.AllocationTracker;
+import com.pingpong.ConnectionInfo;
 import com.pingpong.gc_free.custom.ByteUtil;
 import com.pingpong.gc_free.custom.CustomSetUtil;
 import gnu.trove.procedure.TObjectProcedure;
@@ -14,6 +15,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.List;
 
 import static com.pingpong.ConnectionInfo.*;
 
@@ -24,7 +26,7 @@ public class  GCFreeNioServer extends Thread {
 
     private int sent = 0;
     private int got = 0;
-    private String outputMessage;
+    private List<String> messages;
     private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
 
@@ -46,9 +48,9 @@ public class  GCFreeNioServer extends Thread {
         return true;
     };
 
-    public GCFreeNioServer(int limitMessages, String outputMessage) {
-        this.outputMessage = outputMessage;
+    public GCFreeNioServer(int limitMessages) {
         this.limitMessages = limitMessages;
+        this.messages = ConnectionInfo.generateRandomStrings(limitMessages + 1);
     }
 
 
@@ -107,7 +109,7 @@ public class  GCFreeNioServer extends Thread {
         try {
             anotheClient = (SocketChannel) key.channel();
             anotheClient.read(inputBuffer); got++;
-            outputBuffer.put(byteUtil.bytesFromString(outputMessage)).flip();
+            outputBuffer.put(byteUtil.bytesFromString(messages.get(sent))).flip();
             anotheClient.write(outputBuffer); sent++;
             clearBuffers();
             if (sent == limitMessages + 1) {

@@ -6,8 +6,6 @@ import com.pingpong.gc_free.custom.ByteUtil;
 import com.pingpong.gc_free.server.GCFreeNioServer;
 import org.junit.jupiter.api.Test;
 
-import static com.pingpong.ConnectionInfo.PING;
-import static com.pingpong.ConnectionInfo.PONG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GCFreeAllocationTest {
@@ -60,8 +58,8 @@ public class GCFreeAllocationTest {
     public void test() throws InterruptedException {
         // given
         int messagesAmount = 10_000;
-        GCFreeNioServer server = new GCFreeNioServer(messagesAmount, PONG);
-        GCFreeNioClient client = new GCFreeNioClient(messagesAmount, PING);
+        GCFreeNioServer server = new GCFreeNioServer(messagesAmount);
+        GCFreeNioClient client = new GCFreeNioClient(messagesAmount);
 
         //when
         server.start();

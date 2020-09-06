@@ -10,14 +10,19 @@ public class GetStatTest {
     public void getStat() throws InterruptedException {
         System.out.println("Starting getting statistic...");
 
+        AllocationTracker.IS_ACTIVE = false;
+
         long start = System.nanoTime();
+        GetStatisticGCFreeNioTest getStatisticGCFreeNioTest = new GetStatisticGCFreeNioTest();
+        getStatisticGCFreeNioTest.test();
+
+        System.gc();
+        Thread.sleep(2000);
+
         GetStatisticStandardNioTest getStatisticStandardNioTest = new GetStatisticStandardNioTest();
         getStatisticStandardNioTest.test();
 
-        System.gc();
 
-        GetStatisticGCFreeNioTest getStatisticGCFreeNioTest = new GetStatisticGCFreeNioTest();
-        getStatisticGCFreeNioTest.test();
         long end = System.nanoTime();
 
         System.out.println("The getting statistic finished in " + (end - start) + " ns");

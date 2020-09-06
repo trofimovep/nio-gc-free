@@ -1,6 +1,7 @@
 package com.pingpong.standard.server;
 
 import com.pingpong.AllocationTracker;
+import com.pingpong.ConnectionInfo;
 import com.pingpong.gc_free.custom.ByteUtil;
 import com.pingpong.gc_free.custom.CustomSetUtil;
 
@@ -12,6 +13,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.List;
 import java.util.Set;
 
 import static com.pingpong.ConnectionInfo.*;
@@ -21,27 +23,24 @@ public class StandardNioServer extends Thread {
     private int limitMessages;
     private boolean isConnect = true;
 
-    private String outputMessage;
     private int sent = 0;
     private int got = 0;
+    private List<String> messages;
     private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-    private ByteUtil byteUtil = new ByteUtil(BUFFER_SIZE);
-    private CustomSetUtil customSetUtil = new CustomSetUtil();
-
-    private static Selector selector;
-    private ServerSocketChannel socketChannel;
-    private ServerSocket serverSocket;
-    private InetSocketAddress inetSocketAddress = new InetSocketAddress(HOST, PORT);
     private int ops;
-    private Set<SelectionKey> selectedKeys;
     private SocketChannel client;
+    private static Selector selector;
+    private ServerSocket serverSocket;
+    private Set<SelectionKey> selectedKeys;
+    private ServerSocketChannel socketChannel;
+    private InetSocketAddress inetSocketAddress = new InetSocketAddress(HOST, PORT);
 
 
-    public StandardNioServer(int limitMessages, String outputMessage) {
-        this.outputMessage = outputMessage;
+    public StandardNioServer(int limitMessages) {
         this.limitMessages = limitMessages;
+        this.messages = ConnectionInfo.generateRandomStrings(limitMessages + 1);
     }
 
 
@@ -102,7 +101,7 @@ public class StandardNioServer extends Thread {
         try {
             client = (SocketChannel) key.channel();
             client.read(inputBuffer); got++;
-            outputBuffer.put(outputMessage.getBytes()).flip();
+            outputBuffer.put(messages.get(sent).getBytes()).flip();
             client.write(outputBuffer); sent++;
             clearBuffers();
             if (sent == limitMessages + 1) {

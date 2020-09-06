@@ -1,19 +1,21 @@
 package com.pingpong.gc_free.client;
 
 import com.pingpong.AllocationTracker;
+import com.pingpong.ConnectionInfo;
 import com.pingpong.gc_free.custom.ByteUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.List;
 
 import static com.pingpong.ConnectionInfo.*;
 
 public class GCFreeNioClient extends Thread {
 
     private int messagetAmount;
-    private String message;
+    private List<String> messages;
 
     private ByteBuffer outputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer inputBuffer = ByteBuffer.allocate(BUFFER_SIZE);
@@ -23,21 +25,21 @@ public class GCFreeNioClient extends Thread {
     private int sent = 0;
     private int got = 0;
 
-    public GCFreeNioClient(int messagetAmount, String message) {
+    public GCFreeNioClient(int messagetAmount) {
         this.messagetAmount = messagetAmount;
-        this.message = message;
+        this.messages = ConnectionInfo.generateRandomStrings(messagetAmount);
     }
 
 
     public void run() {
         try {
-            startMessageExcange(messagetAmount, message);
+            startMessageExcange(messagetAmount);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void startMessageExcange(int size, String message) throws IOException {
+    private void startMessageExcange(int size) throws IOException {
                 client = SocketChannel.open(new InetSocketAddress(HOST, PORT));
                 client.write(ByteBuffer.allocate(BUFFER_SIZE));
                 client.read(inputBuffer);
@@ -48,7 +50,7 @@ public class GCFreeNioClient extends Thread {
                 }
 
                 for (int i = 0; i < size; i++) {
-                    outputBuffer.put(byteUtil.bytesFromString(message));
+                    outputBuffer.put(byteUtil.bytesFromString(messages.get(i)));
                     outputBuffer.flip();
                     client.write(outputBuffer); sent++;
                     client.read(inputBuffer); got++;
@@ -73,12 +75,12 @@ public class GCFreeNioClient extends Thread {
         return this;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getMessages() {
+        return messages;
     }
 
-    public GCFreeNioClient setMessage(String message) {
-        this.message = message;
+    public GCFreeNioClient setMessages(List<String> messages) {
+        this.messages = messages;
         return this;
     }
 

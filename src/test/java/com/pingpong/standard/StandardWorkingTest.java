@@ -9,14 +9,14 @@ import static com.pingpong.ConnectionInfo.PING;
 import static com.pingpong.ConnectionInfo.PONG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WorkingTest {
+public class StandardWorkingTest {
 
     @Test
     public void test() throws InterruptedException {
         // given
         int messagesAmount = 10_000;
-        StandardNioServer server = new StandardNioServer(messagesAmount, PONG);
-        StandardNioClient client = new StandardNioClient(messagesAmount, PING);
+        StandardNioServer server = new StandardNioServer(messagesAmount);
+        StandardNioClient client = new StandardNioClient(messagesAmount);
 
         //when
         server.start();

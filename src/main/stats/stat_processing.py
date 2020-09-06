@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-MESSAGE_AMOUNT=[1, 10, 100, 200, 300, 1_000, 10_000, 100_000]
+MESSAGE_AMOUNT=[1, 10, 100, 200, 300, 1_000, 10_000, 100_000, 1_000_000]
 
 
 standardnio_stat_nano = open("StandardNioStat.txt", "r").read().split(";")

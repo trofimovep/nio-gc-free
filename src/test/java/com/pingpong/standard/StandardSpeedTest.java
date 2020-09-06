@@ -4,18 +4,15 @@ import com.pingpong.standard.client.StandardNioClient;
 import com.pingpong.standard.server.StandardNioServer;
 import org.junit.jupiter.api.Test;
 
-import static com.pingpong.ConnectionInfo.PING;
-import static com.pingpong.ConnectionInfo.PONG;
 
-
-public class SpeedTest {
+public class StandardSpeedTest {
 
     @Test
     public void test() throws InterruptedException {
         // given
         int messagesAmount = 10_000;
-        StandardNioServer server = new StandardNioServer(messagesAmount, PONG);
-        StandardNioClient client = new StandardNioClient(messagesAmount, PING);
+        StandardNioServer server = new StandardNioServer(messagesAmount);
+        StandardNioClient client = new StandardNioClient(messagesAmount);
 
         //when
         server.start();

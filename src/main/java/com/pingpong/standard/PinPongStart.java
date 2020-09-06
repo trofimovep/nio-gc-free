@@ -11,8 +11,8 @@ public class PinPongStart {
     private static int limitMessages = 100;
     private static int clientsAmount = 100;
 
-    private static GCFreeNioServer server = new GCFreeNioServer(limitMessages, PONG);
-    private static GCFreeNioClient client = new GCFreeNioClient(limitMessages, PING);
+    private static GCFreeNioServer server = new GCFreeNioServer(limitMessages);
+    private static GCFreeNioClient client = new GCFreeNioClient(limitMessages);
 
     public static void main(String[] args) throws InterruptedException {
         server.start();

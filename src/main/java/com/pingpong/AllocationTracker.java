@@ -5,7 +5,7 @@ import com.google.monitoring.runtime.instrumentation.Sampler;
 
 public class AllocationTracker {
 
-    public static final boolean IS_ACTIVE = true;
+    public static  boolean IS_ACTIVE = true;
 
     private static boolean[] activated = new boolean[1];
 

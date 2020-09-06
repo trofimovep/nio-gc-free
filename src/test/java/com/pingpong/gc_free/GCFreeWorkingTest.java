@@ -9,15 +9,15 @@ import static com.pingpong.ConnectionInfo.PING;
 import static com.pingpong.ConnectionInfo.PONG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WorkingTest {
+public class GCFreeWorkingTest {
 
     @Test
     public void test() throws InterruptedException {
         // given
         int messagesAmount = 10;
         int clients = 10;
-        GCFreeNioServer server = new GCFreeNioServer(messagesAmount, PONG);
-        GCFreeNioClient client = new GCFreeNioClient(messagesAmount, PING);
+        GCFreeNioServer server = new GCFreeNioServer(messagesAmount);
+        GCFreeNioClient client = new GCFreeNioClient(messagesAmount);
 
         //when
         server.start();
