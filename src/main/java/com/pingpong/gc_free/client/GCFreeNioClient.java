@@ -3,6 +3,7 @@ package com.pingpong.gc_free.client;
 import com.pingpong.AllocationTracker;
 import com.pingpong.ConnectionInfo;
 import com.pingpong.gc_free.custom.ByteUtil;
+import net.openhft.affinity.AffinityLock;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -33,7 +34,9 @@ public class GCFreeNioClient extends Thread {
 
     public void run() {
         try {
-            startMessageExcange(messagetAmount);
+            try (AffinityLock al = AffinityLock.acquireCore()) {
+                startMessageExcange(messagetAmount);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

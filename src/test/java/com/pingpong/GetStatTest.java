@@ -12,6 +12,8 @@ public class GetStatTest {
 
         AllocationTracker.IS_ACTIVE = false;
 
+        System.gc();
+        Thread.sleep(2000);
         long start = System.nanoTime();
         GetStatisticGCFreeNioTest getStatisticGCFreeNioTest = new GetStatisticGCFreeNioTest();
         getStatisticGCFreeNioTest.test();
@@ -21,8 +23,6 @@ public class GetStatTest {
 
         GetStatisticStandardNioTest getStatisticStandardNioTest = new GetStatisticStandardNioTest();
         getStatisticStandardNioTest.test();
-
-
         long end = System.nanoTime();
 
         System.out.println("The getting statistic finished in " + (end - start) + " ns");

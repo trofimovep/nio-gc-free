@@ -66,11 +66,11 @@ public class  GCFreeNioServer extends Thread {
 
 
     private void startServer() {
+        BitSet aff = new BitSet();
+        aff.set(3, true);
+        LinuxJNAAffinity.INSTANCE.setAffinity(aff);
         try {
 //            try (AffinityLock al = AffinityLock.acquireCore()) {
-            BitSet aff = new BitSet();
-                aff.set(3, true);
-                LinuxJNAAffinity.INSTANCE.setAffinity(aff);
                 selector = Selector.open();
                 customSetUtil.substitudeSelectedKeysSet(selector);
 
