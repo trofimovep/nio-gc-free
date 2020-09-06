@@ -12,7 +12,7 @@ Experiments show that thread affinity ineffectual in a common case, but if you i
  
  ## Instrumentation
   It uses: 
-    - [trove4j](https://bitbucket.org/trove4j/trove/src/master/)
-    - [Java-Thread-Affinity](https://github.com/OpenHFT/Java-Thread-Affinity)
-    - [Google allocation-instrumenter](https://github.com/google/allocation-instrumenter)
+   - [trove4j](https://bitbucket.org/trove4j/trove/src/master/)
+   - [Java-Thread-Affinity](https://github.com/OpenHFT/Java-Thread-Affinity)
+   - [Google allocation-instrumenter](https://github.com/google/allocation-instrumenter)
     
