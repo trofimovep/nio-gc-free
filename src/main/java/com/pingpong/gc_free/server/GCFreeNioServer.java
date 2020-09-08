@@ -7,9 +7,6 @@ import com.pingpong.gc_free.custom.CustomSetUtil;
 import gnu.trove.procedure.TObjectProcedure;
 import gnu.trove.set.hash.THashSet;
 import net.openhft.affinity.AffinityLock;
-import net.openhft.affinity.impl.LinuxJNAAffinity;
-
-//import openhft.affinity.impl.LinuxJNAAffinity;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -19,7 +16,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.BitSet;
 import java.util.List;
 
 import static com.pingpong.ConnectionInfo.*;
@@ -66,9 +62,6 @@ public class  GCFreeNioServer extends Thread {
 
 
     private void startServer() {
-        BitSet aff = new BitSet();
-        aff.set(3, true);
-        LinuxJNAAffinity.INSTANCE.setAffinity(aff);
         try {
             try (AffinityLock al = AffinityLock.acquireCore()) {
                 selector = Selector.open();
