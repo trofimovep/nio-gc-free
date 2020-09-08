@@ -70,7 +70,7 @@ public class  GCFreeNioServer extends Thread {
         aff.set(3, true);
         LinuxJNAAffinity.INSTANCE.setAffinity(aff);
         try {
-//            try (AffinityLock al = AffinityLock.acquireCore()) {
+            try (AffinityLock al = AffinityLock.acquireCore()) {
                 selector = Selector.open();
                 customSetUtil.substitudeSelectedKeysSet(selector);
 
@@ -81,16 +81,8 @@ public class  GCFreeNioServer extends Thread {
                 socketChannel.configureBlocking(false);
                 socketChannel.register(selector, socketChannel.validOps(), null);
 
-
                 // do some work while locked to a CPU.
                 while (isConnect) {
-//                BitSet aff = new BitSet();
-//                aff.set(3, true);
-//                LinuxJNAAffinity.INSTANCE.setAffinity(aff);
-//                AffinityLock
-
-//                    AffinityLock affinityLock
-
                     try {
                         selector.select();
                         selectedKeys = (THashSet<SelectionKey>) selector.selectedKeys();
@@ -101,7 +93,6 @@ public class  GCFreeNioServer extends Thread {
                     }
                 }
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -111,8 +102,10 @@ public class  GCFreeNioServer extends Thread {
                     e.printStackTrace();
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-//    }
+    }
 
 
     private void handleAccept(ServerSocketChannel mySocket) {

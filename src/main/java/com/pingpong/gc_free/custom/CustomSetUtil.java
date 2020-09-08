@@ -23,20 +23,20 @@ public class CustomSetUtil {
     }
 
     public void substitudeSelectedKeysSet(Selector selector) {
-        substitudeToNewMap(selector, "keys", keys);
-        substitudeToNewMap(selector, "publicKeys", publicKeys);
-        substitudeToNewMap(selector, "selectedKeys", selectedKeys);
-        substitudeToNewMap(selector, "publicSelectedKeys", publicSelectedKeys);
+        substitudeToSet(selector, "keys", keys);
+        substitudeToSet(selector, "publicKeys", publicKeys);
+        substitudeToSet(selector, "selectedKeys", selectedKeys);
+        substitudeToSet(selector, "publicSelectedKeys", publicSelectedKeys);
     }
 
 
-    private void substitudeToNewMap(Selector selector, String fieldName, Set customSet) {
+    private void substitudeToSet(Selector selector, String mapName, Set customSet) {
         Field field = null;
         try {
-            field = selector.getClass().getSuperclass().getDeclaredField(fieldName);
+            field = selector.getClass().getSuperclass().getDeclaredField(mapName);
             field.setAccessible(true);
 
-            if (!"publicSelectedKeys".equals(fieldName)) {
+            if (!"publicSelectedKeys".equals(mapName)) {
                 Set values = (Set) field.get(selector);
                 customSet.addAll(values);
             }

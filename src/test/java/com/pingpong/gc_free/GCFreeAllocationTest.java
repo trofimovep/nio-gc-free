@@ -4,6 +4,7 @@ import com.pingpong.AllocationTracker;
 import com.pingpong.gc_free.client.GCFreeNioClient;
 import com.pingpong.gc_free.custom.ByteUtil;
 import com.pingpong.gc_free.server.GCFreeNioServer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,6 +17,11 @@ public class GCFreeAllocationTest {
      * or
      * -javaagent:lib/java-allocation-instrumenter-3.0.jar
      * */
+
+    @BeforeEach
+    void turnOnAllocator() {
+        AllocationTracker.IS_ACTIVE = true;
+    }
 
     @Test
     public void test_agent_is_on() {

@@ -4,16 +4,12 @@ import com.pingpong.gc_free.client.GCFreeNioClient;
 import com.pingpong.gc_free.server.GCFreeNioServer;
 import org.junit.jupiter.api.Test;
 
-import static com.pingpong.ConnectionInfo.PING;
-import static com.pingpong.ConnectionInfo.PONG;
-
 public class GCFreeSpeedTest {
 
     @Test
     public void test() throws InterruptedException {
         // given
         int messagesAmount = 10_000;
-        int clientsAmount = 10_000;
         GCFreeNioServer server = new GCFreeNioServer(messagesAmount);
         GCFreeNioClient client = new GCFreeNioClient(messagesAmount);
 
