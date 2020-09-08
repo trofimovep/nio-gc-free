@@ -8,7 +8,7 @@ Experiments show that thread affinity ineffectual in a common case, but if you i
  ## Code navigation
  
  - [standard](src/main/java/com/pingpong/standard) package: is a package with a standard client-server nio app
- - [gc_free](src/main/java/com/pingpong/standard) package: is a GC-free client-server nio app
+ - [gc_free](src/main/java/com/pingpong/gc_free) package: is a GC-free client-server nio app
  
  ## Instrumentation
   It uses: 
